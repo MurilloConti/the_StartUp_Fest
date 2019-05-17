@@ -2,11 +2,11 @@
   <a v-on:click="changeToVote">
     <div class="card shadow rounded text-center mt-4">
       <div class="card-header p-0">
-        <img :src="ImgUrl" alt class="img-fluid p-1">
+        <img :src="ImgUrl" alt class="img-fluid p-1" />
       </div>
       <div class="card-body">
-        <p class="card-title fest-title">{{CardTitle}}</p>
-        <p class="card-text fest-text">{{CardText}}</p>
+        <p class="card-title fest-title">{{ CardTitle }}</p>
+        <p class="card-text fest-text">{{ CardText }}</p>
       </div>
     </div>
   </a>
@@ -21,8 +21,8 @@ export default {
     SegmentId: String
   },
   methods: {
-    changeToVote: function() {        
-      this.$router.push({ name: 'voting', params: { Id: this.SegmentId } })
+    changeToVote: function() {
+      this.$router.push({ name: "voting", params: { Id: this.SegmentId } });
     }
   }
 };
