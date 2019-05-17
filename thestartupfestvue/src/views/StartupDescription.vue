@@ -18,20 +18,44 @@
             </div>
           </div>
         </div>
+        <div class="col text-center" v-else>
+          <div>
+            <i class="fas fa-circle-notch fa-spin"></i>
+          </div>
+          <h2 class="pt-2 mt-3" style="font-weight:bold">
+            <i class="fas fa-circle-notch fa-spin"></i>
+          </h2>
+          <p class="text-muted"></p>
+          <div class="row">
+            <div class="col-12 col-lg-6">
+              <p class="citacao p-2 mt-3">
+                <i class="fas fa-circle-notch fa-spin"></i>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="row">
         <rating
+          class="mb-3"
           ratingTitle="Proposta"
           SubTitle="A ideia / proposta agradou o ouvinte e teve um bom impacto ?"
         />
         <rating
+          class="mb-3"
           ratingTitle="Apresentação/Pitch"
           SubTitle="A startup soube demonstrar a sua proposta ?"
         />
         <rating
+          class="mb-5"
           ratingTitle="Desenvolvimento"
           SubTitle="No estagio atual do produto / serviço, atende bem a proposta ?"
         />
+      </div>
+      <div class="row">
+        <div class="col m-5">
+          <button class="btn btn-success form-control">Votar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -53,25 +77,29 @@ export default {
     };
   },
   async created() {
-    let id = this.$route.params.Id;
-    const response = await this.$apollo.query({
-      query: gql`
-        query SegMents($id: ID!) {
-          Segment(id: $id) {
-            code
-            Startups {
-              name
-              imageUrl
-              description
+    await this.getStartUpInfo(this.$route.params.Id);
+  },
+  methods: {
+    async getStartUpInfo(id) {
+      const response = await this.$apollo.query({
+        query: gql`
+          query SegMents($id: ID!) {
+            Segment(id: $id) {
+              code
+              Startups {
+                name
+                imageUrl
+                description
+              }
             }
           }
+        `,
+        variables: {
+          id: id
         }
-      `,
-      variables: {
-        id: id
-      }
-    });
-    this.StartUp = response.data;    
+      });
+      this.StartUp = response.data;
+    }
   }
 };
 </script>
