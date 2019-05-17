@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     changeToVote: function() {
-      this.$router.push({ name: "voting", params: { Id: this.SegmentId } });
+      this.$router.push({ name: "StartupDescription", params: { Id: this.SegmentId } });
     }
   }
 };
