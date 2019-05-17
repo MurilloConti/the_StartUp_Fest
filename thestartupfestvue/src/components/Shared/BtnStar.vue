@@ -1,5 +1,5 @@
 <template>
-  <a v-on:click="Activete" class="star">
+  <a class="star">
     <i :class="{ activeStar: this.Active, notActive: !this.Active}" class="fas fa-star p-1"></i>
   </a>
 </template>
@@ -11,13 +11,8 @@ export default {
       },
   data() {
     return {
-      Active: this.isActive
+      Active: true
     };
-  },
-  methods: {
-    Activete: function() {        
-      this.Active = !this.Active;
-    }
   }
 };
 </script>
