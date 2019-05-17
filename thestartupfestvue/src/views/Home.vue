@@ -3,12 +3,10 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <div
-            class="card-deck"
-            v-for="StartUp in StartUps.allStartups"
-            :key="StartUp.name"
-          >
-            <Card
+          <div class="card-deck">
+            <Card  class="d-md-flex align-items-md-stretch"
+              v-for="StartUp in StartUps.allStartups"
+              :key="StartUp.name"
               :CardTitle="StartUp.name"
               :CardText="StartUp.Segment.name"
               :ImgUrl="StartUp.imageUrl"

@@ -1,15 +1,15 @@
 <template>
-  <a v-on:click="changeToVote">
-    <div class="card shadow rounded text-center mt-4">
-      <div class="card-header p-0">
-        <img :src="ImgUrl" alt class="img-fluid p-1" />
+  <div class="col" v-on:click="changeToVote">
+    <div class="card shadow rounded text-center mt-4 d-flex align-items-stretch">
+      <div class="card-header p-0 ">
+        <img :src="ImgUrl" alt class="img-fluid p-1 " />
       </div>
       <div class="card-body">
         <p class="card-title fest-title">{{ CardTitle }}</p>
         <p class="card-text fest-text">{{ CardText }}</p>
       </div>
     </div>
-  </a>
+  </div>
 </template>
 <script>
 export default {
@@ -36,5 +36,10 @@ export default {
 .fest-text {
   font-weight: bold;
   color: #757575;
+}
+.card-img-top {
+    width: 100%;
+    height: 15vw;
+    /* object-fit: cover; */
 }
 </style>

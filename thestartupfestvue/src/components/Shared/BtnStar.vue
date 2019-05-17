@@ -1,18 +1,13 @@
 <template>
-  <a class="star">
-    <i :class="{ activeStar: this.Active, notActive: !this.Active}" class="fas fa-star p-1"></i>
-  </a>
+  <div  class="star">
+    <i :class="{ activeStar: isActive, notActive: !isActive}" class="fas fa-star p-1"></i>
+  </div>
 </template>
 <script>
 export default {
   name: "BtnStar",
   props: {
-      isActive:Boolean
-      },
-  data() {
-    return {
-      Active: true
-    };
+    isActive: Boolean    
   }
 };
 </script>
@@ -21,10 +16,9 @@ export default {
   cursor: pointer;
 }
 .activeStar {
-  color: #FFC400;
+  color: #ffc400;
 }
-.notActive
-{
-    color: #BDBDBD
+.notActive {
+  color: #bdbdbd;
 }
 </style>
