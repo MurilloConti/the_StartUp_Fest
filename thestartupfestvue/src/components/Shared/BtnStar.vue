@@ -1,6 +1,6 @@
 <template>
   <div  class="star">
-    <i :class="{ activeStar: isActive, notActive: !isActive}" class="fas fa-star p-1"></i>
+    <i :class="{ activeStar: isActive, deactivatedStar: !isActive}" class="fas fa-star p-1 fa-2x"></i>
   </div>
 </template>
 <script>
@@ -11,14 +11,14 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .star {
   cursor: pointer;
 }
 .activeStar {
   color: #ffc400;
 }
-.notActive {
+.deactivatedStar {
   color: #bdbdbd;
 }
 </style>

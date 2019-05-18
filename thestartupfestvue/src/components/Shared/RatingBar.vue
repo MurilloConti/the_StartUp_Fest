@@ -14,7 +14,7 @@
 <script>
 import btnStar from "@/components/Shared/BtnStar.vue";
 export default {
-  name: "Rating",
+  name: "RatingBar",
   components: {
     btnStar
   },
@@ -77,7 +77,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .subTitle {
   font-size: 0.7em;
   font-weight: bold;

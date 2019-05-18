@@ -1,5 +1,5 @@
 <template>
-  <div class="col" v-on:click="changeToVote">
+  <div class="col" v-on:click="showDescription">
     <div class="card shadow rounded text-center mt-4 d-flex align-items-stretch">
       <div class="card-header p-0 ">
         <img :src="ImgUrl" alt class="img-fluid p-1 " />
@@ -21,13 +21,13 @@ export default {
     SegmentId: String
   },
   methods: {
-    changeToVote: function() {
+    showDescription: function() {
       this.$router.push({ name: "StartupDescription", params: { Id: this.SegmentId } });
     }
   }
 };
 </script>
-<style>
+<style scoped>
 .fest-title {
   font-weight: bold;
   font-size: 1.5em;

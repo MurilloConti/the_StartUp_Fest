@@ -1,10 +1,14 @@
 <template>
   <div class="home">
-    <div class="container">
-      <div class="row">
-        <div class="col">
+    <div class="container" v-if="this.StartUps.length != 0">
+      <nav class="navbar fixed-top navbar-light bg-light justify-content-center p-3 shadow-sm">
+        <h4 style="color:#424242;font-weight:bold">Escolha sua StartUp!</h4>
+      </nav>
+      <div class="row mt-5">
+        <div class="col mt-3">
           <div class="card-deck">
-            <Card  class="d-md-flex align-items-md-stretch"
+            <Card
+              class="d-md-flex align-items-md-stretch"
               v-for="StartUp in StartUps.allStartups"
               :key="StartUp.name"
               :CardTitle="StartUp.name"
@@ -16,17 +20,22 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <Loading></Loading>
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Card from "@/components/Shared/Card.vue";
+import Loading from "@/components/Shared/Loading.vue";
 import gql from "graphql-tag";
 export default {
   name: "home",
   components: {
-    Card
+    Card,
+    Loading
   },
   data() {
     return {

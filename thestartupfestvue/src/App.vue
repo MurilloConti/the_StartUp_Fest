@@ -4,6 +4,7 @@
   </div>
 </template>
 
+
 <script>
 //Por ser um projeto apenas de exempo, manterei as configuraões aqui.
 // const firebaseConfig = {
