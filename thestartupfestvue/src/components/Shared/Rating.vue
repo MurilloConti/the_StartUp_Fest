@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     Activete: function(btn, e) {
+      e.preventDefault();      
       switch (btn) {
         case 1:
           this.Active1 = true;

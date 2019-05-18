@@ -54,7 +54,7 @@
       </div>
       <div class="row">
         <div class="col m-5">
-          <button class="btn btn-success form-control">Votar</button>
+          <button class="btn btn-success form-control" v-on:click="showResults">Votar</button>
         </div>
       </div>
     </div>
@@ -99,11 +99,14 @@ export default {
         }
       });
       this.StartUp = response.data;
+    },    
+    showResults: function() {      
+      this.$router.push({ name: "results"});      
     }
   }
 };
 </script>
-<style>
+<style scoped>
 @import url(https://use.fontawesome.com/releases/v5.8.2/css/all.css);
 .citacao {
   border-left: 3px solid #7e0378;
