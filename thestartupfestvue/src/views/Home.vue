@@ -1,9 +1,7 @@
 <template>
   <div class="home">
     <div class="container" v-if="this.StartUps.length != 0">
-      <nav class="navbar fixed-top navbar-light bg-light justify-content-center p-3 shadow-sm">
-        <h4 style="color:#424242;font-weight:bold">Escolha sua StartUp!</h4>
-      </nav>
+      <NavBar NavTitle="Escolha sua StartUp!" :ShowHomeButton="false"></NavBar>
       <div class="row mt-5">
         <div class="col mt-3">
           <div class="card-deck">
@@ -15,7 +13,7 @@
               :Segment="StartUp.Segment.name"
               :ImgUrl="StartUp.imageUrl"
               :Description="StartUp.description"
-              v-on:click.native="showDescription(index)"
+              v-on:click.native="goToDescriptionView(index)"
             />
           </div>
         </div>
@@ -28,9 +26,9 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import Card from "@/components/Shared/Card.vue";
 import Loading from "@/components/Shared/Loading.vue";
+import NavBar from "@/components/Shared/NavBar.vue";
 import gql from "graphql-tag";
 import { store } from "@/store.js";
 const fb = require("../firebaseConfig.js");
@@ -38,7 +36,8 @@ export default {
   name: "home",
   components: {
     Card,
-    Loading
+    Loading,
+    NavBar
   },
   data() {
     return {
@@ -46,7 +45,7 @@ export default {
     };
   },
   methods: {
-    login() {
+    loginFireBase() {
       fb.auth
         .signInAnonymously()
         .then(user => {
@@ -56,7 +55,7 @@ export default {
           console.log(err);
         });
     },
-    showDescription: function(index) {
+    goToDescriptionView: function(index) {
       var startup = this.StartUps.allStartups[index];
       this.$store.commit("setSelectedStartUp", {
         title: startup.name,
@@ -67,8 +66,7 @@ export default {
       this.$router.push({ name: "StartupDescription" });
     }
   },
-  async created() {
-    this.login();
+  async beforeCreate() {
     const response = await this.$apollo.query({
       query: gql`
         query allSegments {
@@ -85,7 +83,11 @@ export default {
       `
     });
     this.StartUps = response.data;
+  },
+  created() {
+    this.loginFireBase();
   }
 };
 </script>
-<style></style>
+<style>
+</style>
