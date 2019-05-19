@@ -16,6 +16,6 @@
   font-family: "Exo", sans-serif;
   font-size: 16px;
   background: #fafafa;
-  height: 100%;
+  min-height: 96vh;
 }
 </style>

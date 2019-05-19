@@ -9,12 +9,13 @@
           <div class="card-deck">
             <Card
               class="d-md-flex align-items-md-stretch"
-              v-for="StartUp in StartUps.allStartups"
+              v-for="(StartUp,index) in StartUps.allStartups"
               :key="StartUp.name"
               :Title="StartUp.name"
               :Segment="StartUp.Segment.name"
               :ImgUrl="StartUp.imageUrl"
               :Description="StartUp.description"
+              v-on:click.native="showDescription(index)"
             />
           </div>
         </div>
@@ -31,7 +32,7 @@
 import Card from "@/components/Shared/Card.vue";
 import Loading from "@/components/Shared/Loading.vue";
 import gql from "graphql-tag";
-import { store } from '@/store.js'
+import { store } from "@/store.js";
 const fb = require("../firebaseConfig.js");
 export default {
   name: "home",
@@ -48,12 +49,22 @@ export default {
     login() {
       fb.auth
         .signInAnonymously()
-        .then(user => {          
-          this.$store.commit("setCurrentUser", user.user.uid);                                     
+        .then(user => {
+          this.$store.commit("setCurrentUser", user.user.uid);
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    showDescription: function(index) {
+      var startup = this.StartUps.allStartups[index];
+      this.$store.commit("setSelectedStartUp", {
+        title: startup.name,
+        text: startup.Segment.name,
+        Url: startup.imageUrl,
+        description: startup.description
+      });
+      this.$router.push({ name: "StartupDescription" });
     }
   },
   async created() {
@@ -63,7 +74,7 @@ export default {
         query allSegments {
           allStartups {
             name
-            imageUrl            
+            imageUrl
             description
             Segment {
               name
