@@ -9,7 +9,7 @@
       :cellTitle="cell.Nome"
       :ImgUrl="cell.ImgUrl"
       :cellSubTitle="cell.Segment"
-      :TotalVotes="cell.TotalVotes"
+      :TotalVotes="cell.TotalVotes"      
     ></ResultCell>
   </div>
 </template>

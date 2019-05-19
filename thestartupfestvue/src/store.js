@@ -22,6 +22,15 @@ export const store = new Vuex.Store({
             commit('setApresentacoes', null)
             commit('setDesenvolvimentos', null)
         },
+        setPropsAsync({ commit }, val) {
+            commit('setPropostas', val)
+        },
+        setPitchAsync({ commit }, val) {
+            commit('setApresentacoes', val)
+        },
+        setDesenvAsync({ commit }, val) {
+            commit('setDesenvolvimentos', val)
+        }
     },
     mutations: {
         setCurrentUser(state, val) {
@@ -32,15 +41,6 @@ export const store = new Vuex.Store({
         },
         setSelectedStartUp(state, val) {
             state.startUp = val
-        },
-        setPropostas(state, val) {
-            state.propostas = val
-        },
-        setApresentacoes(state, val) {
-            state.apresentacoes = val
-        },
-        setDesenvolvimentos(state, val) {
-            state.desenvolvimentos = val
         },
         setDesenvGrade(state, val) {
             state.gradeDesenv = val
@@ -54,28 +54,6 @@ export const store = new Vuex.Store({
     }
 });
 
-fb.pitchCollection.orderBy("Grade").onSnapshot(function (querySnapshot) {
-    let pitchArray = [];
-    querySnapshot.forEach(function (doc) {
-        pitchArray.push(doc.data());
-    });
-    store.commit('setApresentacoes', pitchArray)
-});
-fb.propostasCollection.orderBy("Grade").onSnapshot(function (querySnapshot) {
-    let propsArray = [];
-    querySnapshot.forEach(function (doc) {
-        propsArray.push(doc.data());
-    });
-    store.commit('setPropostas', propsArray)
-});
-
-fb.desenvolvimentoCollection.orderBy("Grade").onSnapshot(function (querySnapshot) {
-    let desenvArray = [];
-    querySnapshot.forEach(function (doc) {
-        desenvArray.push(doc.data());
-    });
-    store.commit('setDesenvolvimentos', desenvArray)
-})
 fb.auth.onAuthStateChanged(user => {
     if (user) {
         store.commit('setCurrentUser', user.uid)

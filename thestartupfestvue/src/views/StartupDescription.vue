@@ -125,7 +125,7 @@ export default {
       var objTitle = that.StartUp.title.replace(/[^\w\s]/gi, "");
       return new Promise(function(resolve, reject) {
         fb.UsersCollection.doc(that.$store.state.currentUser)
-          .set({ [objTitle]: true },{merge: true})
+          .set({ [objTitle]: true }, { merge: true })
           .then(function(doc) {
             resolve(true);
           })
@@ -173,14 +173,13 @@ export default {
           });
       });
     },
-    showResults: function() {
+    showResults: function() {      
       this.$router.push({ name: "results" });
     }
   },
   created() {
     this.StartUp = this.$store.state.startUp;
-    if(this.StartUp == null)
-    this.$router.push({ name: "home" });
+    if (this.StartUp == null) this.$router.push({ name: "home" });
   }
 };
 </script>

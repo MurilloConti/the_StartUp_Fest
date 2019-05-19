@@ -1,25 +1,25 @@
 <template>
   <div class="container-fluid">
-    <div class="row">
-      <nav class="navbar fixed-top navbar-light bg-light justify-content-center align-middle p-3 shadow-sm">
-        <div class="col-1">
-           <router-link to="/home" style="color:#424242"><i class="fas fa-home"></i></router-link>
-         </div>        
-        <div class="col pt-2 d-flex align-items-center justify-content-center"><h4 style="color:#424242;font-weight:bold">Resultados</h4></div>
-      </nav>
+     <NavBar NavTitle="Resultados" :ShowHomeButton="true"></NavBar>
+    <div class="row mt-5">
+      <div class="col mt-5">
+        <ResultTable TableTitle="Proposta" :rows="Proposta"></ResultTable>
+        <ResultTable TableTitle="Apresentação/pitch" :rows="Apresentacao"></ResultTable>
+        <ResultTable TableTitle="Desenvolvimento" :rows="Desenvolvimento"></ResultTable>
+      </div>
     </div>
-    <ResultTable TableTitle="Proposta" :rows="this.$store.state.propostas"></ResultTable>
-    <ResultTable TableTitle="Apresentação/pitch" :rows="this.$store.state.apresentacoes"></ResultTable>
-    <ResultTable TableTitle="Desenvolvimento" :rows="this.$store.state.desenvolvimentos"></ResultTable>
   </div>
 </template>
 
 <script>
 import ResultTable from "@/components/Shared/ResultTable.vue";
+import NavBar from "@/components/Shared/NavBar.vue";
 const fb = require("@/firebaseConfig.js");
+import { store } from "@/store.js";
 export default {
   components: {
-    ResultTable
+    ResultTable,
+    NavBar
   },
   data() {
     return {
@@ -28,10 +28,31 @@ export default {
       Desenvolvimento: []
     };
   },
-  created() {    
-    this.Proposta = this.$store.state.propostas;   
-    this.Apresentacao = this.$store.state.apresentacoes;
-    this.Desenvolvimento = this.$store.state.desenvolvimentos;
+  beforeCreate() {
+    var that = this;
+    fb.propostasCollection.orderBy("Grade").onSnapshot(function(querySnapshot) {
+      let propsArray = [];
+      querySnapshot.forEach(function(doc) {
+        propsArray.push(doc.data());
+      });
+      that.Proposta = propsArray;
+    });
+    fb.pitchCollection.orderBy("Grade").onSnapshot(function(querySnapshot) {
+      let pitchArray = [];
+      querySnapshot.forEach(function(doc) {
+        pitchArray.push(doc.data());
+      });
+      that.Apresentacao = pitchArray;
+    });
+    fb.desenvolvimentoCollection
+      .orderBy("Grade")
+      .onSnapshot(function(querySnapshot) {
+        let desenvArray = [];
+        querySnapshot.forEach(function(doc) {
+          desenvArray.push(doc.data());
+        });
+        that.Desenvolvimento = desenvArray;
+      });
   }
 };
 </script>

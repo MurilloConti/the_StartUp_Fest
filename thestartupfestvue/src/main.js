@@ -7,8 +7,14 @@ const fb = require('./firebaseConfig.js')
 
 Vue.config.productionTip = false
 Vue.prototype.$apollo = apollo 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+let app
+fb.auth.onAuthStateChanged(user => {
+    if (!app) {
+        app = new Vue({
+            el: '#app',
+            router,
+            store,
+            render: h => h(App)
+        })
+    }
+})

@@ -1,5 +1,5 @@
 <template>
-  <div class="row h-100 align-items-center justify-content-center cellBorder shadow-sm">
+  <div class="row h-100 align-items-center justify-content-center cellBorder shadow-sm" style="margin-right: -5px;">
     <div class="col-2 text-center">
       <p class="cellplacing">{{placing}}º</p>
     </div>
@@ -60,7 +60,8 @@ export default {
 
 <style scoped>
 .cellBorder {
-  border: 1px solid #eeeeee;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
 }
 .cellplacing {
   font-weight: bold;
