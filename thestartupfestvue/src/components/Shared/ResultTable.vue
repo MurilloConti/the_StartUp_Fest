@@ -2,7 +2,7 @@
   <div>
     <h4 style="font-weight:bold" class="p-2 my-3">{{TableTitle}}</h4>
     <ResultCell
-      v-for="(cell,index) in sorted_Candidates"
+      v-for="(cell,index) in sorted_Candidates"      
       :key="cell.Nome"
       :placing="index + 1"
       :CellGrade="cell.Grade"
@@ -27,7 +27,8 @@ export default {
   computed: {
     sorted_Candidates() {
       return this.rows.sort((a, b) => {
-        return b.Grade - a.Grade;
+        console.log('a',a,'b',b);
+        return (b.Grade/b.TotalVotes) - (a.Grade/a.TotalVotes);
       });
     }    
   },

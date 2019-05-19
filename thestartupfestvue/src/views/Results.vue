@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-     <NavBar NavTitle="Resultados" :ShowHomeButton="true"></NavBar>
+    <NavBar NavTitle="Resultados" :ShowHomeButton="true"></NavBar>
     <div class="row mt-5">
       <div class="col mt-5">
         <ResultTable TableTitle="Proposta" :rows="Proposta"></ResultTable>
@@ -30,17 +30,21 @@ export default {
   },
   beforeCreate() {
     var that = this;
-    fb.propostasCollection.orderBy("Grade").onSnapshot(function(querySnapshot) {
+    fb.propostasCollection.orderBy("Grade","desc").onSnapshot(function(querySnapshot) {
       let propsArray = [];
       querySnapshot.forEach(function(doc) {
-        propsArray.push(doc.data());
+        var obj = doc.data();
+        obj.Nome = doc.id;
+        propsArray.push(obj);
       });
       that.Proposta = propsArray;
     });
     fb.pitchCollection.orderBy("Grade").onSnapshot(function(querySnapshot) {
       let pitchArray = [];
       querySnapshot.forEach(function(doc) {
-        pitchArray.push(doc.data());
+        var obj = doc.data();
+        obj.Nome = doc.id;
+        pitchArray.push(obj);
       });
       that.Apresentacao = pitchArray;
     });
@@ -49,7 +53,9 @@ export default {
       .onSnapshot(function(querySnapshot) {
         let desenvArray = [];
         querySnapshot.forEach(function(doc) {
-          desenvArray.push(doc.data());
+          var obj = doc.data();
+          obj.Nome = doc.id;
+          desenvArray.push(obj);
         });
         that.Desenvolvimento = desenvArray;
       });
