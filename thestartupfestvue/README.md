@@ -1,3 +1,4 @@
+Nesse projeto, por se tratar apenas de um projeto demonstrativo, todos os commits foram feitos diretamente na branch master. Em um cenario real, deveriam ter sido criados branches adicionais Ex: Develop e futures.
 # thestartupfestvue
 
 ## Project setup
