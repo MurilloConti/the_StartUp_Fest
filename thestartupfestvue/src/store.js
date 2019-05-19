@@ -17,10 +17,9 @@ export const store = new Vuex.Store({
     },
     actions: {
         clearData({ commit }) {
-            commit('setSelectedStartUp', null)
-            commit('setPropostas', null)
-            commit('setApresentacoes', null)
-            commit('setDesenvolvimentos', null)
+            commit('setDesenvGrade', 0)
+            commit('setPitchGrade', 0)
+            commit('setPropostaGrade', 0)
         },
         setPropsAsync({ commit }, val) {
             commit('setPropostas', val)

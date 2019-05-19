@@ -180,6 +180,8 @@ export default {
   created() {
     this.StartUp = this.$store.state.startUp;
     if (this.StartUp == null) this.$router.push({ name: "home" });
+    else
+    this.$store.dispatch('clearData');
   }
 };
 </script>
