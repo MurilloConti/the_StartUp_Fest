@@ -76,3 +76,8 @@ fb.desenvolvimentoCollection.orderBy("Grade").onSnapshot(function (querySnapshot
     });
     store.commit('setDesenvolvimentos', desenvArray)
 })
+fb.auth.onAuthStateChanged(user => {
+    if (user) {
+        store.commit('setCurrentUser', user.uid)
+    }
+})

@@ -49,7 +49,7 @@ export default {
       fb.auth
         .signInAnonymously()
         .then(user => {          
-          this.$store.commit("setCurrentUser", user.user);                                     
+          this.$store.commit("setCurrentUser", user.user.uid);                                     
         })
         .catch(err => {
           console.log(err);

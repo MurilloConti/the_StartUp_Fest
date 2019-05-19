@@ -41,10 +41,7 @@
       </div>
       <div class="row justify-content-center">
         <div class="col col-md-6 offset--md-4 m-5">
-          <button
-            class="btn btn-success form-control"
-            v-on:click="validateVote"            
-          >Finalizar</button>
+          <button class="btn btn-success form-control" v-on:click="validateVote">Finalizar</button>
         </div>
       </div>
     </div>
@@ -72,22 +69,10 @@ export default {
     };
   },
   methods: {
-    saveToFirebase(grade, totVotes, docRef) {
-      docRef
-        .set({
-          Grade: grade,
-          ImgUrl: this.StartUp.Url,
-          Segment: this.StartUp.text,
-          TotalVotes: totVotes
-        })
-        .then(function() {})
-        .catch(function(error) {
-          console.error("Error writing document1: ", error);
-        });
-    },
-    fetchFbData(docRef, grade, StartUp) {
-      var actualGrade;
-      var actualVotes;
+    fetchFbData(docRef, grade) {
+      let actualGrade;
+      let actualVotes;
+      let that = this;
       docRef
         .get()
         .then(function(doc) {
@@ -98,50 +83,95 @@ export default {
             actualGrade = grade;
             actualVotes = 1;
           }
-          docRef
-            .set({
-              Grade: actualGrade,
-              ImgUrl: StartUp.Url,
-              Segment: StartUp.text,
-              TotalVotes: actualVotes
-            })
-            .then(function() {})
-            .catch(function(error) {
-              console.error("Error writing document1: ", error);
-            });
+          that.saveToFirebase(docRef, actualGrade, actualVotes);
         })
         .catch(function(error) {
           console.log("Error getting document2:", error);
         });
     },
+    saveToFirebase(docRef, actualGrade, actualVotes) {
+      var that = this;
+      docRef
+        .set({
+          Grade: actualGrade,
+          ImgUrl: that.StartUp.Url,
+          Segment: that.StartUp.text,
+          TotalVotes: actualVotes
+        })
+        .then(function() {
+          that.updateVotersList();
+        })
+        .catch(function(error) {
+          console.error("Error writing document1: ", error);
+        });
+    },
     saveVotes() {
       var votouProp = this.fetchFbData(
         fb.propostasCollection.doc(this.StartUp.title),
-        this.$store.state.gradeProposta,
-        this.StartUp
+        this.$store.state.gradeProposta
       );
       var votouPitch = this.fetchFbData(
         fb.pitchCollection.doc(this.StartUp.title),
-        this.$store.state.gradePitch,
-        this.StartUp
+        this.$store.state.gradePitch
       );
       var votouDsenv = this.fetchFbData(
         fb.desenvolvimentoCollection.doc(this.StartUp.title),
-        this.$store.state.gradeDesenv,
-        this.StartUp
+        this.$store.state.gradeDesenv
       );
       this.showResults();
     },
+    updateVotersList() {
+      var that = this;
+      var objTitle = that.StartUp.title.replace(/[^\w\s]/gi, "");
+      return new Promise(function(resolve, reject) {
+        fb.UsersCollection.doc(that.$store.state.currentUser)
+          .set({ [objTitle]: true },{merge: true})
+          .then(function(doc) {
+            resolve(true);
+          })
+          .catch(function(error) {
+            reject(error);
+          });
+      });
+    },
     validateVote() {
-      if (
-        this.$store.gradeProposta > 0 &&
-        this.$store.gradePitch > 0 &&
-        this.$store.gradeDesenv > 0
-      ) {
-        this.saveVotes();
-      } else {
-        alert("Obrigatório votar nas 3 categorias.");
-      }
+      console.log("valida");
+      var that = this;
+      this.searchIfVoted().then(function(hasVoted) {
+        if (hasVoted) {
+          alert("Seu voto já foi contabilizado, Obrigado!");
+        } else {
+          if (
+            that.$store.state.gradeProposta > 0 &&
+            that.$store.state.gradePitch > 0 &&
+            that.$store.state.gradeDesenv > 0
+          ) {
+            that.saveVotes();
+          } else {
+            alert("Obrigatório votar nas 3 categorias.");
+          }
+        }
+      });
+    },
+    searchIfVoted() {
+      var that = this;
+      var objTitle = that.StartUp.title.replace(/[^\w\s]/gi, "");
+      return new Promise(function(resolve, reject) {
+        fb.UsersCollection.doc(that.$store.state.currentUser)
+          .get()
+          .then(function(doc) {
+            if (doc.exists) {
+              if (doc.data()[objTitle] != null && doc.data()[objTitle]) {
+                resolve(true);
+              } else resolve(false);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch(function(error) {
+            reject(error);
+          });
+      });
     },
     showResults: function() {
       this.$router.push({ name: "results" });

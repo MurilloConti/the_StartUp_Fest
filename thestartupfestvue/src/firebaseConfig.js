@@ -23,11 +23,13 @@ const currentUser = auth.currentUser
 const propostasCollection = db.collection('Proposta')
 const pitchCollection = db.collection('Apresentacao')
 const desenvolvimentoCollection = db.collection('Desenvolvimento')
+const UsersCollection = db.collection('Votantes')
 
 export {
     db,
     auth,
     propostasCollection,
     pitchCollection,
-    desenvolvimentoCollection
+    desenvolvimentoCollection,
+    UsersCollection
 }
