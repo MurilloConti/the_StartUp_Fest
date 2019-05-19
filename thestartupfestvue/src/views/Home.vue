@@ -11,10 +11,10 @@
               class="d-md-flex align-items-md-stretch"
               v-for="StartUp in StartUps.allStartups"
               :key="StartUp.name"
-              :CardTitle="StartUp.name"
-              :CardText="StartUp.Segment.name"
+              :Title="StartUp.name"
+              :Segment="StartUp.Segment.name"
               :ImgUrl="StartUp.imageUrl"
-              :SegmentId="StartUp.Segment.id"
+              :Description="StartUp.description"
             />
           </div>
         </div>
@@ -31,6 +31,8 @@
 import Card from "@/components/Shared/Card.vue";
 import Loading from "@/components/Shared/Loading.vue";
 import gql from "graphql-tag";
+import { store } from '@/store.js'
+const fb = require("../firebaseConfig.js");
 export default {
   name: "home",
   components: {
@@ -42,14 +44,26 @@ export default {
       StartUps: []
     };
   },
+  methods: {
+    login() {
+      fb.auth
+        .signInAnonymously()
+        .then(user => {          
+          this.$store.commit("setCurrentUser", user.user);                                     
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
   async created() {
+    this.login();
     const response = await this.$apollo.query({
       query: gql`
         query allSegments {
           allStartups {
             name
-            imageUrl
-            annualReceipt
+            imageUrl            
             description
             Segment {
               name

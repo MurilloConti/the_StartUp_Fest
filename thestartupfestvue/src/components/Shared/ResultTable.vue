@@ -5,10 +5,11 @@
       v-for="(cell,index) in sorted_Candidates"
       :key="cell.Nome"
       :placing="index + 1"
-      :CellGrade="cell.Nota"
+      :CellGrade="cell.Grade"
       :cellTitle="cell.Nome"
       :ImgUrl="cell.ImgUrl"
-      :cellSubTitle="cell.Categoria"
+      :cellSubTitle="cell.Segment"
+      :TotalVotes="cell.TotalVotes"
     ></ResultCell>
   </div>
 </template>
@@ -21,23 +22,15 @@ export default {
   },
   props: {
     TableTitle: String,
-    rows: Object
-  },
-  data() {
-    return {
-      info: []
-    };
+    rows: null
   },
   computed: {
     sorted_Candidates() {
-      return this.info.StartUps.sort((a, b) => {
-        return b.Nota - a.Nota;
+      return this.rows.sort((a, b) => {
+        return b.Grade - a.Grade;
       });
-    }
+    }    
   },
-  created() {
-    this.info = this.rows;
-  }
 };
 </script>
 

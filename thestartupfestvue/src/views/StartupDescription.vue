@@ -1,19 +1,20 @@
 <template>
   <div>
-    <div class="container" v-if="StartUp.Segment != null">      
+    <div class="container" v-if="StartUp != null">
       <div class="row">
         <div class="col text-center">
           <img
-            :src="StartUp.Segment.Startups[0].imageUrl"
-            :alt="StartUp.Segment.Startups[0].name"
-            class="mt-3 img-thumbnail" style="max-height:400px"
+            :src="StartUp.Url"
+            :alt="StartUp.title"
+            class="mt-3 img-thumbnail"
+            style="max-height:400px"
           >
-          <h2 class="pt-2 mt-3" style="font-weight:bold">{{StartUp.Segment.Startups[0].name}}</h2>
-          <p class="text-muted">{{StartUp.Segment.code}}</p>
+          <h2 class="pt-2 mt-3" style="font-weight:bold">{{StartUp.title}}</h2>
+          <p class="text-muted">{{StartUp.text}}</p>
           <div class="row justify-content-center">
             <div class="col col-md-6 col-lg-4">
               <p class="text-justify citacao p-2 mt-3">
-                <em>{{StartUp.Segment.Startups[0].description}}</em>
+                <em>{{StartUp.description}}</em>
               </p>
             </div>
           </div>
@@ -39,8 +40,11 @@
         </div>
       </div>
       <div class="row justify-content-center">
-        <div class="col col-md-6 offset--md-4  m-5">
-          <button class="btn btn-success form-control" v-on:click="showResults">Votar</button>
+        <div class="col col-md-6 offset--md-4 m-5">
+          <button
+            class="btn btn-success form-control"
+            v-on:click="validateVote"            
+          >Finalizar</button>
         </div>
       </div>
     </div>
@@ -50,7 +54,9 @@
 <script>
 import rating from "@/components/Shared/RatingBar.vue";
 import Loading from "@/components/Shared/Loading.vue";
+import { store } from "@/store.js";
 import gql from "graphql-tag";
+const fb = require("@/firebaseConfig.js");
 export default {
   name: "StartupDescription",
   components: {
@@ -62,37 +68,87 @@ export default {
   },
   data() {
     return {
-      StartUp: []
+      StartUp: null
     };
   },
-  async created() {
-    if (this.$route.params.Id != null)
-      await this.getStartUpInfo(this.$route.params.Id);
-  },
   methods: {
-    async getStartUpInfo(id) {
-      const response = await this.$apollo.query({
-        query: gql`
-          query SegMents($id: ID!) {
-            Segment(id: $id) {
-              code
-              Startups {
-                name
-                imageUrl
-                description
-              }
-            }
+    saveToFirebase(grade, totVotes, docRef) {
+      docRef
+        .set({
+          Grade: grade,
+          ImgUrl: this.StartUp.Url,
+          Segment: this.StartUp.text,
+          TotalVotes: totVotes
+        })
+        .then(function() {})
+        .catch(function(error) {
+          console.error("Error writing document1: ", error);
+        });
+    },
+    fetchFbData(docRef, grade, StartUp) {
+      var actualGrade;
+      var actualVotes;
+      docRef
+        .get()
+        .then(function(doc) {
+          if (doc.exists) {
+            actualGrade = doc.data().Grade + grade;
+            actualVotes = doc.data().TotalVotes + 1;
+          } else {
+            actualGrade = grade;
+            actualVotes = 1;
           }
-        `,
-        variables: {
-          id: id
-        }
-      });
-      this.StartUp = response.data;
+          docRef
+            .set({
+              Grade: actualGrade,
+              ImgUrl: StartUp.Url,
+              Segment: StartUp.text,
+              TotalVotes: actualVotes
+            })
+            .then(function() {})
+            .catch(function(error) {
+              console.error("Error writing document1: ", error);
+            });
+        })
+        .catch(function(error) {
+          console.log("Error getting document2:", error);
+        });
+    },
+    saveVotes() {
+      var votouProp = this.fetchFbData(
+        fb.propostasCollection.doc(this.StartUp.title),
+        this.$store.state.gradeProposta,
+        this.StartUp
+      );
+      var votouPitch = this.fetchFbData(
+        fb.pitchCollection.doc(this.StartUp.title),
+        this.$store.state.gradePitch,
+        this.StartUp
+      );
+      var votouDsenv = this.fetchFbData(
+        fb.desenvolvimentoCollection.doc(this.StartUp.title),
+        this.$store.state.gradeDesenv,
+        this.StartUp
+      );
+      this.showResults();
+    },
+    validateVote() {
+      if (
+        this.$store.gradeProposta > 0 &&
+        this.$store.gradePitch > 0 &&
+        this.$store.gradeDesenv > 0
+      ) {
+        this.saveVotes();
+      } else {
+        alert("Obrigatório votar nas 3 categorias.");
+      }
     },
     showResults: function() {
       this.$router.push({ name: "results" });
     }
+  },
+  created() {
+    this.StartUp = this.$store.state.startUp;
   }
 };
 </script>

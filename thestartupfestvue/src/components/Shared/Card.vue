@@ -1,29 +1,31 @@
 <template>
-  <div class="col" v-on:click="showDescription">
+  <div  v-on:click="showDescription">
     <div class="card shadow rounded text-center mt-4 d-flex align-items-stretch">
       <div class="card-header p-0 ">
-        <img :src="ImgUrl" alt class="img-fluid p-1 " />
+        <img :src="ImgUrl" alt class="img-fluid p-1 " style="max-height:400px;max-width:200px" />
       </div>
       <div class="card-body">
-        <p class="card-title fest-title">{{ CardTitle }}</p>
-        <p class="card-text fest-text">{{ CardText }}</p>
+        <p class="card-title fest-title">{{ Title }}</p>
+        <p class="card-text fest-text">{{ Segment }}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
-export default {
+import { store } from '@/store.js'
+export default {  
   name: "Card",
   props: {
-    CardTitle: String,
-    CardText: String,
-    ImgUrl: String,
-    SegmentId: String
+    Title: String,
+    Segment: String,
+    ImgUrl: String,    
+    Description:String
   },
   methods: {
     showDescription: function() {
-      this.$router.push({ name: "StartupDescription", params: { Id: this.SegmentId } });
-    }
+      this.$store.commit("setSelectedStartUp",  {title:this.Title,text:this.Segment,Url:this.ImgUrl,description:this.Description});
+      this.$router.push({ name: "StartupDescription" });
+    }    
   }
 };
 </script>

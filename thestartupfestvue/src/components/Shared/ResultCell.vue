@@ -11,28 +11,28 @@
       <p class="m-0 text-muted cellSubTitle">{{cellSubTitle}}</p>
       <div class="row h-100 align-items-center">
         <div class="col-8 mb-3 pr-0">
-          <i class="fas fa-star activeStar" v-if="nota >= 1"></i>
-          <i class="fas fa-star-half-alt activeStar" v-else-if="nota > 0"></i>
+          <i class="fas fa-star activeStar" v-if="Nota >= 1"></i>
+          <i class="fas fa-star-half-alt activeStar" v-else-if="Nota > 0"></i>
           <i class="far fa-star activeStar" v-else></i>
 
-          <i class="fas fa-star activeStar" v-if="nota >= 2"></i>
-          <i class="fas fa-star-half-alt activeStar" v-else-if="nota > 1"></i>
+          <i class="fas fa-star activeStar" v-if="Nota >= 2"></i>
+          <i class="fas fa-star-half-alt activeStar" v-else-if="Nota > 1"></i>
           <i class="far fa-star activeStar" v-else></i>
 
-          <i class="fas fa-star activeStar" v-if="nota >= 3"></i>
-          <i class="fas fa-star-half-alt activeStar" v-else-if="nota > 2"></i>
+          <i class="fas fa-star activeStar" v-if="Nota >= 3"></i>
+          <i class="fas fa-star-half-alt activeStar" v-else-if="Nota > 2"></i>
           <i class="far fa-star activeStar" v-else></i>
 
-          <i class="fas fa-star activeStar" v-if="nota >= 4"></i>
-          <i class="fas fa-star-half-alt activeStar" v-else-if="nota > 3"></i>
+          <i class="fas fa-star activeStar" v-if="Nota >= 4"></i>
+          <i class="fas fa-star-half-alt activeStar" v-else-if="Nota > 3"></i>
           <i class="far fa-star activeStar" v-else></i>
 
-          <i class="fas fa-star activeStar" v-if="nota == 5"></i>
-          <i class="fas fa-star-half-alt activeStar" v-else-if="nota > 4"></i>
+          <i class="fas fa-star activeStar" v-if="Nota >= 5"></i>
+          <i class="fas fa-star-half-alt activeStar" v-else-if="Nota > 4"></i>
           <i class="far fa-star activeStar" v-else></i>
         </div>
         <div class="col mb-2 text-left pl-0">
-          <p>{{CellGrade}}/5</p>
+          <p>{{Nota.toFixed(1)}}/5</p>
         </div>
       </div>
     </div>
@@ -47,16 +47,14 @@ export default {
     cellTitle: String,
     ImgUrl: String,
     cellSubTitle: String,
-    CellGrade: Number
+    CellGrade: Number,
+    TotalVotes: Number
   },
-  data() {
-      return {
-      nota: Number    
-      }
-  },
-  created() {
-      this.nota = this.CellGrade
-  },
+  computed: {
+    Nota() {
+      return (this.CellGrade / this.TotalVotes);    
+    }
+  }
 };
 </script>
 

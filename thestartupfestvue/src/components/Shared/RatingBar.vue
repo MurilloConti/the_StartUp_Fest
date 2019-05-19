@@ -13,6 +13,7 @@
 </template>
 <script>
 import btnStar from "@/components/Shared/BtnStar.vue";
+import { store } from "@/store.js";
 export default {
   name: "RatingBar",
   components: {
@@ -33,7 +34,7 @@ export default {
   },
   methods: {
     Activete: function(btn, e) {
-      e.preventDefault();      
+      e.preventDefault();
       switch (btn) {
         case 1:
           this.Active1 = true;
@@ -41,6 +42,7 @@ export default {
           this.Active3 = false;
           this.Active4 = false;
           this.Active5 = false;
+          this.saveRatingValue(1, this.ratingTitle);
           break;
         case 2:
           this.Active1 = true;
@@ -48,6 +50,7 @@ export default {
           this.Active3 = false;
           this.Active4 = false;
           this.Active5 = false;
+          this.saveRatingValue(2, this.ratingTitle);
           break;
         case 3:
           this.Active1 = true;
@@ -55,6 +58,7 @@ export default {
           this.Active3 = true;
           this.Active4 = false;
           this.Active5 = false;
+          this.saveRatingValue(3, this.ratingTitle);
           break;
         case 4:
           this.Active1 = true;
@@ -62,6 +66,7 @@ export default {
           this.Active3 = true;
           this.Active4 = true;
           this.Active5 = false;
+          this.saveRatingValue(4, this.ratingTitle);
           break;
         case 5:
           this.Active1 = true;
@@ -69,10 +74,19 @@ export default {
           this.Active3 = true;
           this.Active4 = true;
           this.Active5 = true;
+          this.saveRatingValue(5, this.ratingTitle);
           break;
         default:
           break;
       }
+    },
+    //This method change the grade of a specific categorie
+    saveRatingValue(grade, title) {
+      let path = "";
+      if (title == "Proposta") path = "setPropostaGrade";
+      else if (title == "Apresentação/Pitch") path = "setPitchGrade";
+      else if (title == "Desenvolvimento") path = "setDesenvGrade";
+      this.$store.commit(path, grade);
     }
   }
 };
